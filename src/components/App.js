@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 // import * as BooksAPI from './BooksAPI'
 import Search from './Search';
-import Shelf from './Shelf';
+import ShelfDisplay from './ShelfDisplay';
 import '../styles/App.css'
 
 class BooksApp extends Component {
@@ -30,7 +30,7 @@ class BooksApp extends Component {
           this.state.showSearchPage ? (
             <Search exitSearch={this.exitSearch} />
           ) : (
-            <Shelf goToSearch={this.goToSearch} />
+            <ShelfDisplay goToSearch={this.goToSearch} />
           )
         }
       </div>
