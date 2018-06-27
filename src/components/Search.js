@@ -1,25 +1,56 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { search, update } from '../BooksAPI';
+import Book from './Book';
+
 
 class Search extends Component {
+  state = {
+    search: '',
+    books: []
+  }
+
+  searchBooks = (searchText) => {
+    search(searchText).then(response => {
+      Array.isArray(response) ? 
+      ( this.setState({ books: response }) ) : 
+      ( this.setState({ books: [] }) );
+    });
+  }
+
+  updateSearch = (searchText) => {
+    this.setState({ search: searchText })
+    this.searchBooks(searchText); 
+  }
+
+  moveBookToShelf = (book, shelf) => {
+    update(book, shelf).then(response => {
+      this.searchBooks(this.state.search);
+    })
+  }
+
   render() {
+    const { search } = this.state
     return (
       <div className="search-books">
         <div className="search-books-bar">
           <a className="close-search" onClick={this.props.exitSearch}>Close</a>
           <div className="search-books-input-wrapper">
-            {/*
-              NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              You can find these search terms here:
-              https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-              However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-              you don't find a specific author or title. Every search is limited by search terms.
-            */}
-            <input type="text" placeholder="Search by title or author"/>
+            <input 
+              type="text" 
+              placeholder="Search by title or author" 
+              value={search}
+              onChange={(event) => this.updateSearch(event.target.value)}
+            />
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            {
+              this.state.books.map(book => (
+                <li><Book key={book.id} details={book} moveBookToShelf={this.moveBookToShelf} /></li>
+              ))
+            }
+          </ol>
         </div>
       </div>
     );
