@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Shelf from './Shelf';
 import { update } from '../BooksAPI';
 
@@ -26,7 +27,7 @@ class ShelfDisplay extends Component {
           <Shelf title="Read" books={this.filterBooks("read")} moveBookToShelf={this.moveBookToShelf} />
         </div>
         <div className="open-search">
-          <a onClick={this.props.goToSearch}>Add a book</a>
+          <Link to="/search">Add a book</Link>
         </div>
       </div>
     );

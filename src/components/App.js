@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 import Search from './Search';
 import ShelfDisplay from './ShelfDisplay';
 import '../styles/App.css'
@@ -6,16 +7,7 @@ import { getAll } from '../BooksAPI';
 
 class BooksApp extends Component {
   state = {
-    showSearchPage: false,
     books: []
-  }
-
-  goToSearch = () => {
-    this.setState({ showSearchPage: true });
-  }
-
-  exitSearch = () => {
-    this.setState({ showSearchPage: false });
   }
 
   componentDidMount() {
@@ -31,13 +23,12 @@ class BooksApp extends Component {
   render() {
     return (
       <div className="app">
-        {
-          this.state.showSearchPage ? (
-            <Search exitSearch={this.exitSearch} books={this.state.books} fetchBooks={this.fetchBooks} />
-          ) : (
-            <ShelfDisplay goToSearch={this.goToSearch} books={this.state.books} fetchBooks={this.fetchBooks} />
-          )
-        }
+        <BrowserRouter>
+          <div>
+            <Route exact path="/" render={(routerProps) => <ShelfDisplay books={this.state.books} fetchBooks={this.fetchBooks} {...routerProps} /> } />
+            <Route path="/search" component={(routerProps) =>  <Search books={this.state.books} fetchBooks={this.fetchBooks} {...routerProps} /> }/>
+          </div>
+        </BrowserRouter>
       </div>
     )
   }
