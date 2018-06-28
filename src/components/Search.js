@@ -9,11 +9,34 @@ class Search extends Component {
     books: []
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState(prevState => {
+      let copyState = Object.assign({}, prevState);
+      copyState.books = this.addShelfToBooks(prevState.books, newProps.books);
+      return copyState;
+    });
+  }
+
   searchBooks = (searchText) => {
     search(searchText).then(response => {
-      Array.isArray(response) ? 
-      ( this.setState({ books: response }) ) : 
-      ( this.setState({ books: [] }) );
+      if(Array.isArray(response)) {
+        this.setState({ books: this.addShelfToBooks(response, this.props.books) })
+      } else {
+        this.setState({ books: [] })
+      }
+    });
+  }
+
+  addShelfToBooks = (searchResults, shelfBooks) => {
+    return searchResults.map(result => {
+      const resultCopy = Object.assign({}, result);
+      const matchedBook = shelfBooks.find(book => book.id === result.id);
+      if (matchedBook) {
+        resultCopy.shelf = matchedBook.shelf;
+      } else {
+        resultCopy.shelf = 'none';
+      }
+      return resultCopy;
     });
   }
 
@@ -24,7 +47,7 @@ class Search extends Component {
 
   moveBookToShelf = (book, shelf) => {
     update(book, shelf).then(response => {
-      this.searchBooks(this.state.search);
+      this.props.fetchBooks();
     })
   }
 

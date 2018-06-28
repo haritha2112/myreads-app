@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
 import Shelf from './Shelf';
-import { getAll, update } from '../BooksAPI';
+import { update } from '../BooksAPI';
 
 class ShelfDisplay extends Component {
-  state = {
-    books: []
-  };
-
-  componentDidMount() {
-    this.fetchBooks();
-  }
-
-  fetchBooks = () => {
-    getAll().then((response) => {
-      this.setState({ books: response });
-    });
-  }
 
   filterBooks = (type) => {
-    return this.state.books.filter((book) => book.shelf === type );
+    return this.props.books.filter((book) => book.shelf === type );
   }
 
   moveBookToShelf = (book, shelf) => {
     update(book, shelf).then(response => {
-      this.fetchBooks();
+      this.props.fetchBooks();
     })
   }
 
