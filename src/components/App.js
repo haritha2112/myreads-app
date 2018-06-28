@@ -26,7 +26,7 @@ class BooksApp extends Component {
         <BrowserRouter>
           <div>
             <Route exact path="/" render={(routerProps) => <ShelfDisplay books={this.state.books} fetchBooks={this.fetchBooks} {...routerProps} /> } />
-            <Route path="/search" component={(routerProps) =>  <Search books={this.state.books} fetchBooks={this.fetchBooks} {...routerProps} /> }/>
+            <Route exact path="/search" render={(routerProps) => <Search books={this.state.books} fetchBooks={this.fetchBooks} {...routerProps} /> }/>
           </div>
         </BrowserRouter>
       </div>
